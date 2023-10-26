@@ -6,30 +6,60 @@ Stroll.destroy_all
 City.destroy_all
 #=> comme ça à chaque phase de test ça ne me génère pas mille instances
 
-5.times do |index|
-  City.create!(
-    city_name: Faker::Address.city
-   )
-end
+city = {
+  "Paris" => City.create!(city_name: "Paris"), 
+  "Lyon" => City.create!(city_name: "Lyon")
+}
 
-10.times do |index|
-  Chien.create!(
+dogs_array_paris = []
+dogs_array_lyon = []
+
+5.times do |index|
+  dog = Chien.create!(
     name: Faker::Creature::Dog.name,
     breed: Faker::Creature::Dog.breed,
-    city: City.all.sample)
+    city: city["Paris"]
+  )
+  dogs_array_paris << dog
 end
+
+5.times do |index|
+  dog = Chien.create!(
+    name: Faker::Creature::Dog.name,
+    breed: Faker::Creature::Dog.breed,
+    city: city["Lyon"]
+  )
+  dogs_array_lyon << dog
+end
+
+dogsitter_array_paris = []
+dogsitter_array_lyon = []
 
 10.times do |index|
-  DogSitter.create!(
+  dogsitter = DogSitter.create!(
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
-    city: City.all.sample)
-
-end
-
-30.times do |index|
-  Stroll.create!(
-    chien: Chien.all.sample,
-    dog_sitter: DogSitter.all.sample
+    city: [city["Paris"], city["Lyon"]].sample
   )
+  if dogsitter.city == "Paris"
+    dogsitter_array_paris << dogsitter
+  else
+    dogsitter_array_lyon << dogsitter
+  end
 end
+
+#c'est là que je fais l'association
+
+# 15.times do |index|
+Stroll.create!(
+  chien: dogs_array_paris[0],
+  dog_sitter: dogsitter_array_paris[0]
+)
+# end
+
+# 15.times do |index|
+#   Stroll.create!(
+#     chien: dogs_array_lyon.sample,
+#     dog_sitter: dogsitter_array_lyon.sample
+#   )
+# end

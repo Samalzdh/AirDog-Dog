@@ -2,6 +2,9 @@ source "https://rubygems.org"
 
 ruby "3.2.2"
 
+gem "table_print"
+gem "faker"
+
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.1.1"
 
@@ -66,6 +69,3 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
-
-gem "table_print"
-gem "faker"
